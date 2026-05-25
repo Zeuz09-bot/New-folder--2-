@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(
@@ -9,6 +10,7 @@ export async function POST(
   try {
     const { id } = await params;
     const supabase = await createServerSupabaseClient();
+    const supabaseAdmin = createAdminClient();
     
     // Parse form data
     const formData = await request.formData();
@@ -46,10 +48,10 @@ export async function POST(
     const fileExt = file.type.split('/')[1];
     const fileName = `${id}_${uuidv4()}.${fileExt}`;
 
-    // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase
+    // Upload to Supabase Storage using admin client (bypasses RLS)
+    const { data: uploadData, error: uploadError } = await supabaseAdmin
       .storage
-      .from('payment_proofs')
+      .from('payment-proofs')
       .upload(fileName, buffer, {
         contentType: file.type,
         upsert: true,
@@ -57,17 +59,17 @@ export async function POST(
 
     if (uploadError) {
       console.error('Upload error:', uploadError);
-      return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to upload image: ' + uploadError.message }, { status: 500 });
     }
 
     // Get public URL
-    const { data: { publicUrl } } = supabase
+    const { data: { publicUrl } } = supabaseAdmin
       .storage
-      .from('payment_proofs')
+      .from('payment-proofs')
       .getPublicUrl(fileName);
 
-    // Update ticket with proof URL
-    const { error: updateError } = await supabase
+    // Update ticket with proof URL using admin client
+    const { error: updateError } = await supabaseAdmin
       .from('tickets')
       .update({ payment_proof_url: publicUrl })
       .eq('id', id);
