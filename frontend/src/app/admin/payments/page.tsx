@@ -6,7 +6,7 @@ import { formatNaira, formatDateTime } from '@/lib/utils';
 import { Ticket } from '@/lib/types';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
-import { Search, ShieldAlert, Check, X, FileImage, CreditCard } from 'lucide-react';
+import { Search, ShieldAlert, Check, X, FileImage, CreditCard, Clock } from 'lucide-react';
 
 export default function PaymentApprovalsPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
