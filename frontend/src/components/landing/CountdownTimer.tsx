@@ -6,14 +6,40 @@ import { getTimeRemaining } from '@/lib/utils';
 import { EVENT } from '@/lib/constants';
 
 export default function CountdownTimer() {
-  const [time, setTime] = useState(getTimeRemaining(EVENT.date));
+  const [time, setTime] = useState<ReturnType<typeof getTimeRemaining> | null>(null);
 
   useEffect(() => {
+    setTime(getTimeRemaining(EVENT.date));
     const interval = setInterval(() => {
       setTime(getTimeRemaining(EVENT.date));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Show loading placeholder during SSR/hydration
+  if (!time) {
+    return (
+      <div className="flex items-center justify-center gap-3 sm:gap-4">
+        {['Days', 'Hours', 'Mins', 'Secs'].map((label, i) => (
+          <div key={label} className="flex items-center gap-3 sm:gap-4">
+            <div className="flex flex-col items-center">
+              <div className="glass-gold rounded-xl w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center glow-gold">
+                <span className="text-2xl sm:text-3xl font-bold text-gold font-[family-name:var(--font-poppins)]">
+                  --
+                </span>
+              </div>
+              <span className="text-[10px] sm:text-xs text-zinc-500 mt-2 uppercase tracking-wider">
+                {label}
+              </span>
+            </div>
+            {i < 3 && (
+              <span className="text-gold/40 text-xl sm:text-2xl font-light mt-[-1rem]">:</span>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   if (time.expired) {
     return (

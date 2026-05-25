@@ -21,7 +21,23 @@ export async function POST(request: Request) {
 
     const amount = tier.price * ticket_quantity;
 
-    // We don't generate the code or token here, the database default functions handle it!
+    // Generate ticket code using the database function, with fallback
+    let ticket_code: string;
+    try {
+      const { data: codeData, error: codeError } = await supabase.rpc('get_next_ticket_code');
+      if (codeError || !codeData) {
+        // Fallback: generate a random ticket code
+        const rand = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+        ticket_code = `EVT-2026-${rand}`;
+      } else {
+        ticket_code = codeData;
+      }
+    } catch {
+      const rand = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+      ticket_code = `EVT-2026-${rand}`;
+    }
+
+    // We don't generate the verification_token here, the database default handles it!
     const { data: ticket, error } = await supabase
       .from('tickets')
       .insert({
@@ -30,6 +46,7 @@ export async function POST(request: Request) {
         phone_number,
         ticket_type,
         ticket_quantity,
+        ticket_code,
         amount_paid: amount,
         payment_status: 'PENDING',
       })
