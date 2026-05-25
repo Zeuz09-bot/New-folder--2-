@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/ NextResponse';
-import { createServerClient } from '@/lib/supabase/server';
+import { NextResponse } from 'next/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { TICKET_TIERS } from '@/lib/constants';
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createServerClient();
+    const supabase = await createServerSupabaseClient();
     const body = await request.json();
 
     const { full_name, email, phone_number, ticket_type, ticket_quantity } = body;

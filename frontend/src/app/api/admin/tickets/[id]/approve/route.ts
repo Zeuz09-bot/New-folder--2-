@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { sendTicketEmail } from '@/lib/email/sender';
 
 export async function POST(
@@ -11,7 +11,7 @@ export async function POST(
     const { id } = await params;
     
     // First, verify the user is an authenticated admin using standard client
-    const supabaseUser = await createServerClient();
+    const supabaseUser = await createServerSupabaseClient();
     const { data: { session } } = await supabaseUser.auth.getSession();
     
     if (!session) {

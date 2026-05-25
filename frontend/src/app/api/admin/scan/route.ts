@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function POST(request: Request) {
   try {
     // 1. Verify admin
-    const supabaseUser = await createServerClient();
+    const supabaseUser = await createServerSupabaseClient();
     const { data: { session } } = await supabaseUser.auth.getSession();
     
     if (!session) {
