@@ -24,15 +24,16 @@ export default function QRScanner({ onScanSuccess, isProcessing }: QRScannerProp
         if (devices && devices.length) {
           if (!mounted) return;
           
-          scannerRef.current = new Html5Qrcode(readerElementId);
+          scannerRef.current = new Html5Qrcode(readerElementId, {
+            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+          });
           
           await scannerRef.current.start(
             { facingMode: 'environment' },
             {
               fps: 10,
               qrbox: { width: 250, height: 250 },
-              aspectRatio: 1.0,
-              formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+              aspectRatio: 1.0
             },
             (decodedText) => {
               if (!isProcessing) {
