@@ -29,8 +29,10 @@ export async function sendTicketEmail(ticket: Ticket) {
   }
 
   try {
-    // Generate QR Code data URL using the ticket verification token
-    const qrCodeDataUrl = await generateQRCode(ticket.verification_token);
+    // Generate QR Code data URL using the ticket verification URL
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const qrCodeUrl = `${siteUrl.replace(/\/$/, '')}/verify/${ticket.verification_token}`;
+    const qrCodeDataUrl = await generateQRCode(qrCodeUrl);
 
     await resend.emails.send({
       from: 'ILEYA FEST <tickets@onboarding.resend.dev>', // In prod, use verified domain

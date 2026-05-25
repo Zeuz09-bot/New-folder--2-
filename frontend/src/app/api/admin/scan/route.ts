@@ -13,10 +13,30 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { token } = body; // This could be the verification_token or the ticket_code
+    let { token } = body; // This could be the verification_token or the ticket_code
 
     if (!token) {
       return NextResponse.json({ error: 'Missing token' }, { status: 400 });
+    }
+
+    // Extract the token if scanned value is a full verification URL
+    if (token.startsWith('http://') || token.startsWith('https://')) {
+      try {
+        const url = new URL(token);
+        const pathParts = url.pathname.split('/');
+        // URL format is typically: /verify/<token>
+        const verifyIndex = pathParts.indexOf('verify');
+        if (verifyIndex !== -1 && pathParts[verifyIndex + 1]) {
+          token = pathParts[verifyIndex + 1];
+        } else {
+          const lastPart = pathParts[pathParts.length - 1];
+          if (lastPart) {
+            token = lastPart;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to parse URL in scanner token:', e);
+      }
     }
 
     const supabaseAdmin = createAdminClient();
