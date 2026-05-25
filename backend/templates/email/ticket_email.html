@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your ILEYA FEST Ticket</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0A0A0A;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#0A0A0A;">
+        <tr>
+            <td align="center" style="padding:40px 20px;">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color:#1A1A1A;border-radius:16px;overflow:hidden;border:1px solid #2A2A2A;">
+
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:linear-gradient(135deg,#D4AF37 0%,#B8960C 50%,#D4AF37 100%);padding:40px 30px;text-align:center;">
+                            <h1 style="margin:0;font-size:32px;color:#000000;font-weight:800;letter-spacing:2px;">
+                                ILEYA FEST
+                            </h1>
+                            <p style="margin:8px 0 0;font-size:16px;color:#1A1A1A;font-weight:600;">
+                                with SAMAD
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Ticket Confirmed Banner -->
+                    <tr>
+                        <td style="background-color:#0D2B0D;padding:16px 30px;text-align:center;border-bottom:1px solid #2A2A2A;">
+                            <p style="margin:0;font-size:18px;color:#4CAF50;font-weight:700;letter-spacing:1px;">
+                                ✅ TICKET CONFIRMED
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding:30px 30px 10px;">
+                            <p style="margin:0;font-size:18px;color:#FFFFFF;font-weight:600;">
+                                Hello {{ ticket.full_name }}! 🎉
+                            </p>
+                            <p style="margin:12px 0 0;font-size:14px;color:#999999;line-height:1.6;">
+                                Your payment has been confirmed and your ticket is ready! Please present this QR code at the entrance.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Ticket Details -->
+                    <tr>
+                        <td style="padding:20px 30px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#0A0A0A;border-radius:12px;border:1px solid #D4AF37;">
+                                <tr>
+                                    <td style="padding:24px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td style="padding:8px 0;border-bottom:1px solid #2A2A2A;">
+                                                    <span style="color:#999999;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Ticket Code</span><br>
+                                                    <span style="color:#D4AF37;font-size:20px;font-weight:700;letter-spacing:2px;">{{ ticket.ticket_code }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:12px 0 8px;">
+                                                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td width="50%" style="padding:4px 0;">
+                                                                <span style="color:#999999;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Tier</span><br>
+                                                                <span style="color:#FFFFFF;font-size:16px;font-weight:600;">{{ ticket.get_ticket_type_display }}</span>
+                                                            </td>
+                                                            <td width="50%" style="padding:4px 0;">
+                                                                <span style="color:#999999;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Quantity</span><br>
+                                                                <span style="color:#FFFFFF;font-size:16px;font-weight:600;">{{ ticket.ticket_quantity }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="50%" style="padding:8px 0 4px;">
+                                                                <span style="color:#999999;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Amount Paid</span><br>
+                                                                <span style="color:#4CAF50;font-size:16px;font-weight:700;">₦{{ ticket.amount_paid|floatformat:0 }}</span>
+                                                            </td>
+                                                            <td width="50%" style="padding:8px 0 4px;">
+                                                                <span style="color:#999999;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Status</span><br>
+                                                                <span style="color:#4CAF50;font-size:16px;font-weight:600;">PAID ✓</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- QR Code -->
+                    <tr>
+                        <td style="padding:10px 30px;text-align:center;">
+                            <p style="margin:0 0 12px;font-size:13px;color:#999999;text-transform:uppercase;letter-spacing:1px;">
+                                Your Entry QR Code
+                            </p>
+                            <div style="background-color:#FFFFFF;display:inline-block;padding:16px;border-radius:12px;">
+                                <img src="cid:qr_code" alt="QR Code" width="200" height="200" style="display:block;">
+                            </div>
+                            <p style="margin:12px 0 0;font-size:12px;color:#666666;">
+                                Screenshot this QR code or show this email at the entrance
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Event Details -->
+                    <tr>
+                        <td style="padding:20px 30px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#0A0A0A;border-radius:12px;border:1px solid #2A2A2A;">
+                                <tr>
+                                    <td style="padding:20px;">
+                                        <p style="margin:0 0 4px;font-size:11px;color:#D4AF37;text-transform:uppercase;letter-spacing:2px;font-weight:600;">
+                                            Event Details
+                                        </p>
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td style="padding:8px 0;">
+                                                    <span style="color:#999999;font-size:13px;">📅 Date:</span>
+                                                    <span style="color:#FFFFFF;font-size:13px;font-weight:600;"> May 28, 2026 (Thursday)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 0;">
+                                                    <span style="color:#999999;font-size:13px;">🕖 Time:</span>
+                                                    <span style="color:#FFFFFF;font-size:13px;font-weight:600;"> 7:00 PM Till Dawn</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 0;">
+                                                    <span style="color:#999999;font-size:13px;">📍 Venue:</span>
+                                                    <span style="color:#FFFFFF;font-size:13px;font-weight:600;"> GT Hotel and Event Center</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 0;">
+                                                    <span style="color:#999999;font-size:13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#999999;font-size:12px;"> Agala Road, Ikire, Osun State</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Verify Link -->
+                    <tr>
+                        <td style="padding:10px 30px;text-align:center;">
+                            <a href="{{ verification_url }}" style="display:inline-block;background:linear-gradient(135deg,#D4AF37,#B8960C);color:#000000;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:700;letter-spacing:1px;">
+                                VERIFY TICKET ONLINE
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:30px;text-align:center;border-top:1px solid #2A2A2A;">
+                            <p style="margin:0;font-size:12px;color:#666666;line-height:1.6;">
+                                For inquiries, call: <span style="color:#D4AF37;">08123090135</span> or <span style="color:#D4AF37;">09064283198</span>
+                            </p>
+                            <p style="margin:8px 0 0;font-size:11px;color:#444444;">
+                                GT Hotel and Event Center presents ILEYA FEST with SAMAD<br>
+                                © 2026 ILEYA FEST. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
