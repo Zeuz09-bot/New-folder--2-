@@ -25,6 +25,7 @@ export default function QRScanner({ onScanSuccess, isProcessing }: QRScannerProp
           if (!mounted) return;
           
           scannerRef.current = new Html5Qrcode(readerElementId, {
+            verbose: false,
             formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
           });
           
