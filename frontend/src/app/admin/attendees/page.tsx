@@ -15,6 +15,27 @@ export default function AttendeesPage() {
   const [search, setSearch] = useState('');
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [viewOpen, setViewOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const handleDelete = async () => {
+    if (!selectedTicket) return;
+    if (!window.confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) return;
+    
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/admin/tickets/${selectedTicket.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      
+      setTickets(tickets.filter(t => t.id !== selectedTicket.id));
+      setViewOpen(false);
+      setSelectedTicket(null);
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete ticket');
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -211,7 +232,8 @@ export default function AttendeesPage() {
               </div>
             )}
 
-            <div className="flex justify-end pt-4 border-t border-white/5">
+            <div className="flex justify-between pt-4 border-t border-white/5">
+              <Button variant="danger" loading={actionLoading} onClick={handleDelete}>Delete Ticket</Button>
               <Button onClick={() => setViewOpen(false)}>Close</Button>
             </div>
           </div>

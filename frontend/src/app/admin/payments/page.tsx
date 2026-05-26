@@ -82,6 +82,26 @@ export default function PaymentApprovalsPage() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!selectedTicket) return;
+    if (!window.confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) return;
+    
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/admin/tickets/${selectedTicket.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      
+      setTickets(tickets.filter(t => t.id !== selectedTicket.id));
+      setPreviewOpen(false);
+      setSelectedTicket(null);
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete ticket');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const filteredTickets = tickets.filter(t => 
     t.full_name.toLowerCase().includes(search.toLowerCase()) || 
     t.ticket_code.toLowerCase().includes(search.toLowerCase())
@@ -226,10 +246,18 @@ export default function PaymentApprovalsPage() {
               )}
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 mt-4">
+              <Button
+                variant="outline"
+                className="flex-[0.5] border-red-500/20 text-red-500 hover:bg-red-500/10"
+                loading={actionLoading}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
               <Button
                 variant="danger"
-                className="flex-1"
+                className="flex-[1]"
                 onClick={() => setRejectOpen(true)}
               >
                 <X className="w-4 h-4 mr-2" />
@@ -237,7 +265,7 @@ export default function PaymentApprovalsPage() {
               </Button>
               <Button
                 variant="gold"
-                className="flex-1"
+                className="flex-[1]"
                 loading={actionLoading}
                 onClick={() => handleApprove(selectedTicket.id)}
               >

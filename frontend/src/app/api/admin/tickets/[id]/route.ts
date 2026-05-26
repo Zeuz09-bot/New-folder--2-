@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { sendTicketEmail } from '@/lib/email/sender';
 
-export async function POST(
+export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -18,10 +17,10 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Use admin client to bypass RLS for updating the ticket
+    // Use admin client to bypass RLS for deleting the ticket
     const supabaseAdmin = createAdminClient();
 
-    // 1. Fetch the ticket details
+    // 1. Fetch the ticket details to ensure it exists
     const { data: ticket, error: fetchError } = await supabaseAdmin
       .from('tickets')
       .select('*')
@@ -32,31 +31,20 @@ export async function POST(
       return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
     }
 
-    if (ticket.payment_status === 'APPROVED') {
-      return NextResponse.json({ error: 'Ticket is already approved' }, { status: 400 });
-    }
-
-    // 2. Update status to APPROVED
-    const { error: updateError } = await supabaseAdmin
+    // 2. Delete the ticket
+    const { error: deleteError } = await supabaseAdmin
       .from('tickets')
-      .update({ payment_status: 'APPROVED' })
+      .delete()
       .eq('id', id);
 
-    if (updateError) {
-      console.error('Failed to update ticket status:', updateError);
-      return NextResponse.json({ error: 'Failed to approve ticket' }, { status: 500 });
+    if (deleteError) {
+      console.error('Failed to delete ticket:', deleteError);
+      return NextResponse.json({ error: 'Failed to delete ticket' }, { status: 500 });
     }
 
-    // 3. Send email synchronously so Vercel doesn't kill the process
-    try {
-      await sendTicketEmail(ticket);
-    } catch (err) {
-      console.error(`Failed to send email for ticket ${id}:`, err);
-    }
-
-    return NextResponse.json({ success: true, message: 'Ticket approved and email sent' });
+    return NextResponse.json({ success: true, message: 'Ticket deleted successfully' });
   } catch (err: any) {
-    console.error('Error in approve route:', err);
+    console.error('Error in delete route:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
