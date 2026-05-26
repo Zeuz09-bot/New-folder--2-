@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tickets (
   full_name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone_number TEXT NOT NULL,
-  ticket_type TEXT NOT NULL CHECK (ticket_type IN ('REGULAR', 'VVIP', 'SILVER', 'GOLD', 'DIAMOND')),
+  ticket_type TEXT NOT NULL CHECK (ticket_type IN ('REGULAR', 'VIP', 'VVIP', 'SILVER', 'GOLD', 'DIAMOND')),
   ticket_quantity INTEGER NOT NULL DEFAULT 1 CHECK (ticket_quantity BETWEEN 1 AND 10),
   amount_paid NUMERIC(12, 2) NOT NULL DEFAULT 0,
   payment_proof_url TEXT,
