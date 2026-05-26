@@ -51,7 +51,7 @@ export async function sendTicketEmail(ticket: Ticket) {
         ticketQuantity: ticket.ticket_quantity,
         ticketCode: ticket.ticket_code,
         amountPaid: ticket.amount_paid,
-        qrCodeDataUrl,
+        qrCodeDataUrl: 'cid:ticket-qrcode', // Use Content-ID reference instead of raw base64
         eventName: EVENT.name,
         eventDate: EVENT.dateDisplay,
         eventTime: EVENT.time,
@@ -60,11 +60,22 @@ export async function sendTicketEmail(ticket: Ticket) {
       })
     );
 
+    // Extract base64 part for the attachment
+    const base64Data = qrCodeDataUrl.split(',')[1];
+
     await transporter.sendMail({
       from: process.env.DEFAULT_FROM_EMAIL || 'ILEYA FEST <tickets@ileyafest.com>',
       to: ticket.email,
       subject: `Your ILEYA FEST Ticket - ${ticket.ticket_code}`,
       html: emailHtml,
+      attachments: [
+        {
+          filename: 'ticket-qrcode.png',
+          content: base64Data,
+          encoding: 'base64',
+          cid: 'ticket-qrcode', // matches the cid in the src above
+        },
+      ],
     });
   } catch (err) {
     console.error('Failed to send email:', err);

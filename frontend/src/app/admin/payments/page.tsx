@@ -51,6 +51,10 @@ export default function PaymentApprovalsPage() {
       setTickets(tickets.filter(t => t.id !== id));
       setPreviewOpen(false);
       setSelectedTicket(null);
+
+      if (data.emailError) {
+        alert(`Ticket approved successfully, BUT the email failed to send.\nError: ${data.emailError}`);
+      }
     } catch (err: any) {
       alert(err.message || 'Failed to approve ticket');
     } finally {
