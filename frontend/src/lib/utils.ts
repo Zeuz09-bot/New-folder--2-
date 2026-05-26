@@ -69,6 +69,8 @@ export function getTierColor(tier: string): string {
   switch (tier) {
     case 'REGULAR':
       return '#8B8B8B';
+    case 'VIP':
+      return '#9B59B6';
     case 'VVIP':
       return '#C0392B';
     case 'SILVER':

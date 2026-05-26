@@ -12,6 +12,7 @@ class Ticket(models.Model):
     # ── Ticket Type Choices ──
     class TicketType(models.TextChoices):
         REGULAR = 'REGULAR', 'Regular'
+        VIP = 'VIP', 'VIP'
         VVIP = 'VVIP', 'VVIP'
         SILVER = 'SILVER', 'Silver'
         GOLD = 'GOLD', 'Gold'
@@ -26,6 +27,7 @@ class Ticket(models.Model):
     # ── Ticket Pricing (NGN) ──
     TIER_PRICES = {
         'REGULAR': 3000,
+        'VIP': 15000,
         'VVIP': 60000,
         'SILVER': 150000,
         'GOLD': 300000,

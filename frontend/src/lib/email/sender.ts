@@ -1,10 +1,20 @@
 import QRCode from 'qrcode';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+import { render } from '@react-email/components';
 import TicketEmail from './template';
 import { EVENT } from '../constants';
 import { Ticket } from '../types';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Create a nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.EMAIL_PORT || '587'),
+  secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_HOST_USER,
+    pass: process.env.EMAIL_HOST_PASSWORD,
+  },
+});
 
 export async function generateQRCode(text: string): Promise<string> {
   try {
@@ -23,8 +33,8 @@ export async function generateQRCode(text: string): Promise<string> {
 }
 
 export async function sendTicketEmail(ticket: Ticket) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn('RESEND_API_KEY is not set. Skipping email dispatch.');
+  if (!process.env.EMAIL_HOST_USER || !process.env.EMAIL_HOST_PASSWORD) {
+    console.warn('Email credentials are not set. Skipping email dispatch.');
     return;
   }
 
@@ -34,11 +44,8 @@ export async function sendTicketEmail(ticket: Ticket) {
     const qrCodeUrl = `${siteUrl.replace(/\/$/, '')}/verify/${ticket.verification_token}`;
     const qrCodeDataUrl = await generateQRCode(qrCodeUrl);
 
-    await resend.emails.send({
-      from: 'ILEYA FEST <tickets@onboarding.resend.dev>', // In prod, use verified domain
-      to: ticket.email,
-      subject: `Your ILEYA FEST Ticket - ${ticket.ticket_code}`,
-      react: TicketEmail({
+    const emailHtml = await render(
+      TicketEmail({
         fullName: ticket.full_name,
         ticketType: ticket.ticket_type,
         ticketQuantity: ticket.ticket_quantity,
@@ -50,7 +57,14 @@ export async function sendTicketEmail(ticket: Ticket) {
         eventTime: EVENT.time,
         eventVenue: EVENT.venue,
         eventAddress: EVENT.address,
-      }),
+      })
+    );
+
+    await transporter.sendMail({
+      from: process.env.DEFAULT_FROM_EMAIL || 'ILEYA FEST <tickets@ileyafest.com>',
+      to: ticket.email,
+      subject: `Your ILEYA FEST Ticket - ${ticket.ticket_code}`,
+      html: emailHtml,
     });
   } catch (err) {
     console.error('Failed to send email:', err);

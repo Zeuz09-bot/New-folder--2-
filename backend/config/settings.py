@@ -156,7 +156,7 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='ILEYA FEST <tickets@i
 # ──────────────────────────────────────────────
 EVENT_NAME = 'ILEYA FEST with SAMAD'
 EVENT_DATE = '2026-05-28'
-EVENT_TIME = '7:00 PM'
+EVENT_TIME = '2:00 PM'
 EVENT_VENUE = 'GT Hotel and Event Center, Agala Road, Ikire, Osun State'
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
 TICKET_VERIFY_URL = f'{FRONTEND_URL}/verify'

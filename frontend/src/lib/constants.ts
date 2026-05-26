@@ -9,9 +9,9 @@ export const EVENT = {
   name: 'ILEYA FEST with SAMAD',
   tagline: 'The Biggest Celebration of the Year',
   date: '2026-05-28',
-  dateDisplay: 'Thursday, May 28th, 2026',
-  time: '7:00 PM',
-  timeEnd: 'Till Dawn',
+    dateDisplay: 'Thursday, May 28th, 2026',
+    time: '2:00 PM',
+    timeEnd: 'Till Dawn',
   venue: 'GT Hotel and Event Center',
   address: 'Agala Road, Ikire, Osun State',
   description:
@@ -54,6 +54,16 @@ export const TICKET_TIERS: TicketTier[] = [
     color: '#8B8B8B',
     gradient: 'from-zinc-600 to-zinc-800',
     icon: '🎫',
+  },
+  {
+    id: 'VIP',
+    name: 'VIP',
+    price: 15000,
+    currency: 'NGN',
+    benefits: ['VIP access', 'Fast-track entry', 'Premium seating area'],
+    color: '#9B59B6',
+    gradient: 'from-purple-500 to-purple-700',
+    icon: '✨',
   },
   {
     id: 'VVIP',
@@ -106,9 +116,9 @@ export const TICKET_TIERS: TicketTier[] = [
 
 // ── Bank Transfer Details ──
 export const BANK_DETAILS = {
-  bankName: 'GTBank (Guaranty Trust Bank)',
-  accountNumber: '0123456789',
-  accountName: 'ILEYA FEST ENTERTAINMENT',
+  bankName: 'Moniepoint',
+  accountNumber: '8236984674',
+  accountName: 'Titus Aiyeniwon',
   note: 'Please use your full name as the transfer reference/narration.',
 } as const;
 
@@ -149,6 +159,7 @@ export const FAQ_ITEMS = [
 // ── Tier price lookup ──
 export const TIER_PRICES: Record<string, number> = {
   REGULAR: 3000,
+  VIP: 15000,
   VVIP: 60000,
   SILVER: 150000,
   GOLD: 300000,

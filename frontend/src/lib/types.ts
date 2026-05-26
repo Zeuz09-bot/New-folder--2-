@@ -2,7 +2,7 @@
 // ILEYA FEST — TypeScript Types
 // ──────────────────────────────────────────────
 
-export type TicketType = 'REGULAR' | 'VVIP' | 'SILVER' | 'GOLD' | 'DIAMOND';
+export type TicketType = 'REGULAR' | 'VIP' | 'VVIP' | 'SILVER' | 'GOLD' | 'DIAMOND';
 export type PaymentStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface Ticket {
