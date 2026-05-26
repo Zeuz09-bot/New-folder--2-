@@ -50,8 +50,13 @@ export async function POST(
     // 3. Send email synchronously so Vercel doesn't kill the process
     try {
       await sendTicketEmail(ticket);
-    } catch (err) {
+    } catch (err: any) {
       console.error(`Failed to send email for ticket ${id}:`, err);
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Ticket approved but email failed to send',
+        emailError: err.message || 'Unknown email error'
+      });
     }
 
     return NextResponse.json({ success: true, message: 'Ticket approved and email sent' });

@@ -231,12 +231,10 @@ export default function PaymentApprovalsPage() {
 
             <div className="relative w-full aspect-[4/3] sm:aspect-video rounded-xl overflow-hidden bg-black border border-white/10 flex items-center justify-center">
               {selectedTicket.payment_proof_url ? (
-                <Image
+                <img
                   src={selectedTicket.payment_proof_url}
                   alt="Payment Proof"
-                  fill
-                  className="object-contain"
-                  unoptimized
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <div className="text-zinc-500 flex flex-col items-center">
