@@ -27,9 +27,8 @@ export default function PaymentApprovalsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       
-      // Filter only tickets that have uploaded proof
-      const withProof = data.data.tickets.filter((t: Ticket) => t.payment_proof_url);
-      setTickets(withProof);
+      // Show all pending tickets regardless of whether they have uploaded proof
+      setTickets(data.data.tickets);
     } catch (err: any) {
       setError(err.message || 'Failed to fetch pending payments');
     } finally {
@@ -166,6 +165,7 @@ export default function PaymentApprovalsPage() {
                     setSelectedTicket(ticket);
                     setPreviewOpen(true);
                   }}
+                  disabled={!ticket.payment_proof_url}
                 >
                   <FileImage className="w-4 h-4" />
                   View Receipt
@@ -209,14 +209,21 @@ export default function PaymentApprovalsPage() {
               </div>
             </div>
 
-            <div className="relative w-full aspect-[4/3] sm:aspect-video rounded-xl overflow-hidden bg-black border border-white/10">
-              <Image
-                src={selectedTicket.payment_proof_url!}
-                alt="Payment Proof"
-                fill
-                className="object-contain"
-                unoptimized
-              />
+            <div className="relative w-full aspect-[4/3] sm:aspect-video rounded-xl overflow-hidden bg-black border border-white/10 flex items-center justify-center">
+              {selectedTicket.payment_proof_url ? (
+                <Image
+                  src={selectedTicket.payment_proof_url}
+                  alt="Payment Proof"
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              ) : (
+                <div className="text-zinc-500 flex flex-col items-center">
+                  <FileImage className="w-8 h-8 mb-2 opacity-50" />
+                  <p>No payment proof uploaded</p>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-4">
