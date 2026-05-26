@@ -1,0 +1,31 @@
+Bug Fix & Feature Update Plan
+Issue 1: Emails not sending on Vercel
+Root Cause: The Next.js API route was attempting to send the email "asynchronously" without waiting for the promise to resolve (sendTicketEmail(ticket).catch(...)). Serverless functions on Vercel immediately terminate execution once a response is returned. The email sending process was likely being killed before it could finish connecting to the SMTP server. Fix: I will update the code to await the sendTicketEmail function, ensuring the email is sent before the serverless function returns the response.
+
+Issue 2: Deleting Incomplete Transactions
+Request: Add the ability to delete transactions that weren't completed. Plan: I will add a new secure DELETE API endpoint and update the Admin UI to include a delete button for pending or rejected tickets.
+
+Proposed Changes
+1. Fix Email Dispatch
+[MODIFY] frontend/src/app/api/admin/tickets/[id]/approve/route.ts
+
+Change the background email dispatch to await sendTicketEmail(ticket).
+2. Create Delete Ticket API Endpoint
+[NEW] frontend/src/app/api/admin/tickets/[id]/route.ts
+
+Implement a DELETE method that verifies admin session and deletes the ticket from Supabase.
+3. Update Admin UI (Attendees Page)
+[MODIFY] frontend/src/app/admin/attendees/page.tsx
+
+Add a "Delete" button inside the Attendee Details modal.
+Add confirmation logic to prevent accidental deletions.
+Add logic to remove the deleted ticket from the local state list.
+4. Update Admin UI (Payments Page)
+[MODIFY] frontend/src/app/admin/payments/page.tsx
+
+Add a "Delete" button to the Payment Review modal for incomplete transactions.
+Add logic to remove the deleted ticket from the UI upon success.
+Verification Plan
+ Review the updated API endpoint to ensure it blocks non-admins from deleting tickets.
+ Verify that await is correctly implemented so the Vercel function stays alive long enough to send the email.
+ (Manual Step for User) Deploy changes, approve a test transaction to verify email delivery, and delete an incomplete test transaction.
